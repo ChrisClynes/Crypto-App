@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import millify from 'millify';//Converts long numbers to pretty, human-readable strings
 import { Link } from 'react-router-dom';
 import { Card, Row, Col, Input } from 'antd';
@@ -9,13 +9,25 @@ import { useGetCryptosQuery } from '../services/cryptoApi';
 const Cryptocurrencies = ({simplified}) => {
     const count = simplified ? 10 : 100;//simplified is being passed down through props, if so set to 10, else 100
     const { data: cryptosList, isFetching } = useGetCryptosQuery(count);
-    const [cryptos, setCryptos] = useState(cryptosList?.data?.coins);
-    console.log(cryptos)
+    const [cryptos, setCryptos] = useState();
+    const [searchTerm, setSearchTerm] = useState('');
+
+    useEffect(() => {
+        const filteredData = cryptosList?.data?.coins.filter((item) => item.name.toLowerCase().includes(searchTerm));
+
+        setCryptos(filteredData);//this useEffect filters crypto data on page from search input box. (?. is optional chaining, basically wont error if undefined)
+    
+    }, [cryptosList, searchTerm]);
 
     if(isFetching) return "Loading...";
 
     return (
         <>
+            {!simplified &&(
+                <div className="search-crypto">
+                    <Input placeholder="Search Cryptocurrencies" onChange={(e) => setSearchTerm(e.target.value)} />
+                </div>
+            )}
             {/*row has gutters or spaces top and bottom and left and right*/}
             <Row gutter={[32, 32]} className="crypto-card-container">
                 {cryptos?.map((currency) => (
