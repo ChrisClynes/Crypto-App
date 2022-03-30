@@ -7,7 +7,7 @@ const cryptoApiHeaders = {
 
 const baseUrl = 'https://coinranking1.p.rapidapi.com/';
 
-const createRequest = (url) => ({ url, headers: cryptoApiHeaders})
+const createRequest = (url) => ({ url, headers: cryptoApiHeaders});
 
 
 export const cryptoApi = createApi({
@@ -16,8 +16,11 @@ export const cryptoApi = createApi({
     endpoints: (builder) => ({
         getCryptos: builder.query({
             query: (count) => createRequest(`/coins?limit=${count}`)
+        }),
+        getCryptoDetails: builder.query({
+            query: (coinId) => createRequest(`/coin/${coinId}`)
         })
     })
 });
 
-export const { useGetCryptosQuery } = cryptoApi; //put "use" before and " Query" at the end. Redux toolkit creates a hook from this which we use to get data
+export const { useGetCryptosQuery,  useGetCryptoDetailsQuery } = cryptoApi; //put "use" before and " Query" at the end. Redux toolkit creates a hook from this which we use to get data
