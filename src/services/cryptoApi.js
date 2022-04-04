@@ -21,10 +21,11 @@ export const cryptoApi = createApi({
             query: (coinId) => createRequest(`/coin/${coinId}`)
         }),
         getCryptoHistory: builder.query({
-            query: ({coinId, timeperiod}) =>
-              createRequest(`coin/${coinId}/history?timeperiod=${timeperiod}`),
+            query: ({coinId, timePeriod}) =>
+              createRequest(`/coin/${coinId}/history?referenceCurrencyUuid=yhjMzLPhuIDl&timePeriod=${timePeriod}`),// had to update API call
           }),
     })
 });
+
 
 export const { useGetCryptosQuery,  useGetCryptoDetailsQuery, useGetCryptoHistoryQuery } = cryptoApi; //put "use" before and " Query" at the end. Redux toolkit creates a hook from this which we use to get data
